@@ -1,0 +1,406 @@
+/* ================================================================
+   styles.css — Estilos para CryptoClásico
+   Tema: Terminal / Retro-futurista oscuro
+   ================================================================ */
+
+/* ===== VARIABLES GLOBALES ===== */
+:root {
+  --bg:       #0a0a0f;       /* Fondo principal */
+  --panel:    #111118;       /* Fondo de tarjetas */
+  --border:   #2a2a3e;       /* Bordes sutiles */
+  --accent:   #00ffcc;       /* Verde terminal (principal) */
+  --accent2:  #ff6b6b;       /* Rojo (descifrar) */
+  --accent3:  #ffd93d;       /* Amarillo (tipo de cifrado) */
+  --text:     #c8c8e0;       /* Texto principal */
+  --text-dim: #5a5a7a;       /* Texto secundario / placeholders */
+  --glow:     0 0 20px rgba(0,255,204,0.3); /* Sombra brillante */
+}
+
+/* ===== RESET Y BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1rem;
+  /* Destellos de color en fondo */
+  background-image:
+    radial-gradient(ellipse at 20% 20%, rgba(0,255,204,0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 80%, rgba(255,107,107,0.04) 0%, transparent 60%);
+}
+
+/* ===== ENCABEZADO ===== */
+header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.logo {
+  font-family: 'VT323', monospace;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  color: var(--accent);
+  text-shadow: var(--glow), 0 0 60px rgba(0,255,204,0.2);
+  letter-spacing: 4px;
+  animation: flicker 4s infinite; /* Efecto pantalla CRT */
+}
+
+/* Parte roja del logo */
+.logo-red { color: var(--accent2); }
+
+/* Animación de parpadeo estilo CRT */
+@keyframes flicker {
+  0%, 95%, 100% { opacity: 1; }
+  96%            { opacity: 0.7; }
+  97%            { opacity: 1; }
+  98%            { opacity: 0.5; }
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-top: 0.25rem;
+}
+
+/* ===== CONTENEDOR PRINCIPAL ===== */
+.container {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* ===== TARJETAS ===== */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.5rem;
+  position: relative;
+}
+
+/* Etiqueta flotante en la esquina superior de cada tarjeta */
+.card::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -0.6rem;
+  left: 1rem;
+  background: var(--panel);
+  color: var(--accent);
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  padding: 0 0.5rem;
+}
+
+/* ===== BOTONES DE MODO (Cifrar / Descifrar) ===== */
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.mode-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mode-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Estado activo: Cifrar */
+.mode-btn.active {
+  border-color: var(--accent);
+  color: var(--bg);
+  background: var(--accent);
+  box-shadow: var(--glow);
+  font-weight: 600;
+}
+
+/* Estado activo: Descifrar (color rojo) */
+.mode-btn.active-red {
+  border-color: var(--accent2);
+  color: var(--bg);
+  background: var(--accent2);
+  box-shadow: 0 0 20px rgba(255,107,107,0.3);
+  font-weight: 600;
+}
+
+/* ===== BOTONES DE TIPO DE CIFRADO ===== */
+.cipher-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.cipher-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  padding: 1rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.cipher-btn .cipher-name {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+
+.cipher-btn .cipher-desc {
+  display: block;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+
+.cipher-btn:hover { border-color: var(--accent3); }
+
+.cipher-btn.active {
+  border-color: var(--accent3);
+  background: rgba(255,217,61,0.06);
+}
+
+.cipher-btn.active .cipher-name { color: var(--accent3); }
+
+/* ===== SECCIÓN DE DESPLAZAMIENTO (César) ===== */
+#shift-section { margin-top: 1rem; }
+
+.shift-label {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Número de desplazamiento resaltado */
+.shift-label span:last-child {
+  color: var(--accent3);
+  font-size: 1rem;
+}
+
+/* Slider personalizado */
+input[type="range"] {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent3);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255,217,61,0.5);
+}
+
+/* ===== ETIQUETA Y TEXTAREA ===== */
+.field-label {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 0.5rem;
+}
+
+textarea {
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--text);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.9rem;
+  padding: 1rem;
+  resize: vertical;
+  min-height: 100px;
+  outline: none;
+  transition: border-color 0.2s;
+  line-height: 1.6;
+}
+
+textarea:focus { border-color: var(--accent); }
+textarea::placeholder { color: var(--text-dim); }
+
+/* ===== BOTÓN EJECUTAR ===== */
+.run-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  color: var(--accent);
+  font-family: 'VT323', monospace;
+  font-size: 1.4rem;
+  letter-spacing: 4px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.run-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: var(--glow);
+}
+
+.run-btn:active { transform: scale(0.98); }
+
+/* ===== TARJETA DE RESULTADO ===== */
+#result-card { display: none; } /* Oculta hasta que se procese */
+
+.result-box {
+  background: rgba(0,0,0,0.5);
+  border: 1px solid var(--accent);
+  border-radius: 3px;
+  padding: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: var(--accent);
+  word-break: break-all;
+  min-height: 60px;
+  box-shadow: inset 0 0 20px rgba(0,255,204,0.05);
+}
+
+/* Fila de insignias informativas */
+.info-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+/* Insignias de información */
+.badge {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 0.3rem 0.75rem;
+  border-radius: 2px;
+  border: 1px solid;
+}
+
+.badge-cipher { border-color: var(--accent3); color: var(--accent3); } /* Tipo de cifrado */
+.badge-mode   { border-color: var(--accent2); color: var(--accent2); } /* Modo */
+.badge-shift  { border-color: var(--accent);  color: var(--accent);  } /* Desplazamiento */
+
+/* Botón copiar */
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-dim);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: auto;
+}
+
+.copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== SECCIÓN DE INFORMACIÓN ===== */
+.info-card details { cursor: pointer; }
+
+.info-card summary {
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+/* Flecha animada */
+.info-card summary::after { content: '▼'; transition: transform 0.2s; }
+.info-card details[open] summary::after { transform: rotate(180deg); }
+
+.info-text {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.8;
+  color: var(--text-dim);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.info-text h4 {
+  color: var(--accent3);
+  letter-spacing: 2px;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.info-text p { font-size: 0.72rem; }
+
+/* ===== PIE DE PÁGINA ===== */
+footer {
+  margin-top: 3rem;
+  font-size: 0.6rem;
+  letter-spacing: 3px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+/* ===== CAMPO DE TEXTO (charset input) ===== */
+input[type="text"] {
+  width: 100%;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--accent3);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+input[type="text"]:focus { border-color: var(--accent3); }
+
+.charset-hint {
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  margin-top: 0.4rem;
+}

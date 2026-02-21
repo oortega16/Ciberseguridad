@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primeros Pasos Cifrando | Cifrado César & Atbash</title>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ===== ENCABEZADO ===== -->
+  <header>
+    <div class="logo">PRIMEROS PASOS<span class="logo-red"> CIFRANDO</span></div>
+    <div class="subtitle">Cifrado César &amp; Atbash · Base ASCII</div>
+  </header>
+
+  <div class="container">
+
+    <!-- MÓDULO: Cifrar / Descifrar -->
+    <div class="card" data-label="MÓDULO">
+      <div class="mode-grid">
+        <button class="mode-btn active" id="btn-encrypt" onclick="setMode('encrypt')">🔒 Cifrar</button>
+        <button class="mode-btn" id="btn-decrypt" onclick="setMode('decrypt')">🔓 Descifrar</button>
+      </div>
+    </div>
+
+    <!-- TIPO DE CIFRADO -->
+    <div class="card" data-label="TIPO DE CIFRADO">
+      <div class="cipher-grid">
+        <button class="cipher-btn active" id="btn-cesar" onclick="setCipher('cesar')">
+          <span class="cipher-name">⚔️ César</span>
+          <span class="cipher-desc">Desplazamiento de caracteres</span>
+        </button>
+        <button class="cipher-btn" id="btn-atbash" onclick="setCipher('atbash')">
+          <span class="cipher-name">🪞 Atbash</span>
+          <span class="cipher-desc">Espejo del charset</span>
+        </button>
+      </div>
+
+      <!-- Control de desplazamiento (solo César) -->
+      <div id="shift-section">
+        <div class="shift-label">
+          <span>Desplazamiento</span>
+          <span id="shift-display">3</span>
+        </div>
+        <input type="range" id="shift" min="1" max="50" value="3"
+               oninput="document.getElementById('shift-display').textContent=this.value">
+      </div>
+    </div>
+
+    <!-- CONJUNTO DE CARACTERES PERSONALIZADO -->
+    <div class="card" data-label="CONJUNTO DE CARACTERES">
+      <div class="field-label">Define los caracteres a usar en el cifrado</div>
+      <input type="text" id="charset-input"
+             value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 "
+             placeholder="Ej: abcdefghijklmnopqrstuvwxyz">
+      <div class="charset-hint">Los duplicados se eliminan automáticamente · El orden define el cifrado</div>
+    </div>
+
+    <!-- TEXTO DE ENTRADA -->
+    <div class="card" data-label="ENTRADA">
+      <div class="field-label">Escribe tu mensaje aquí</div>
+      <textarea id="input-text" placeholder="Ej: Hola mundo..."></textarea>
+    </div>
+
+    <!-- BOTÓN EJECUTAR -->
+    <button class="run-btn" onclick="process()">[ EJECUTAR CIFRADO ]</button>
+
+    <!-- RESULTADO -->
+    <div class="card" data-label="RESULTADO" id="result-card">
+      <div class="result-box" id="output-text"></div>
+      <div class="info-row">
+        <div class="badge badge-cipher" id="badge-cipher">César</div>
+        <div class="badge badge-mode"   id="badge-mode">Cifrado</div>
+        <div class="badge badge-shift"  id="badge-shift">Desplazamiento: 3</div>
+        <button class="copy-btn" onclick="copyResult()">COPIAR</button>
+      </div>
+    </div>
+
+    <!-- REFERENCIA -->
+    <div class="card info-card" data-label="REFERENCIA">
+      <details>
+        <summary>¿Cómo funcionan estos cifrados?</summary>
+        <div class="info-text">
+          <div>
+            <h4>Cifrado César</h4>
+            <p>Cada carácter del charset se desplaza N posiciones. Con charset "abcde" y desplazamiento 2: a→c, b→d, e→b. Funciona de forma circular sobre el conjunto definido.</p>
+          </div>
+          <div>
+            <h4>Cifrado Atbash</h4>
+            <p>Espejo del charset: el primer carácter ↔ el último, el segundo ↔ el penúltimo, etc. Es simétrico: cifrar y descifrar son la misma operación.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+
+  </div>
+
+  <footer>PROGRAMA DE CIFRADO CLÁSICO · CÉSAR & ATBASH · BASE ASCII</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
